@@ -79,6 +79,8 @@ Registered to	soldakim -->
 
     <ul class="list-group"></ul>
 
+    <button onclick="addMusic2()">A+</button>
+
     <script
       src="https://code.jquery.com/jquery-3.6.0.min.js"
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
@@ -88,10 +90,11 @@ Registered to	soldakim -->
       const addMusic = () => {
         $(document).ready($(".list-group").empty());
         const musicKeyWord = $("#song-info").val();
+
         $.ajax({
           type: "GET",
           url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
-          success: (res) => {
+          done: (res) => {
             console.log("연결 성공!");
 
             let musicList = res["results"]["trackmatches"]["track"];
@@ -110,6 +113,22 @@ Registered to	soldakim -->
       };
 
       $(document).ready($(".list-group").empty());
+
+      const addMusic2 = () => {
+        $.ajax({
+          url: "http://www.maniadb.com/api/search/metallica/?sr=artist&display=10&key=example&v=0.5",
+          dataType: "xml",
+          success: function (data) {
+            console.log(data);
+          },
+          error: (err) => {
+            console.log("FUCK");
+            console.log(err);
+          },
+        });
+      };
+
+      addMusic2();
     </script>
 
     <script
