@@ -18,8 +18,9 @@ Registered to	soldakim -->
     />
     <title>M-MEMOTION</title>
   </head>
+
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">MEMOTION</a>
         <button
@@ -42,16 +43,7 @@ Registered to	soldakim -->
               <a class="nav-link" href="#">Link</a>
             </li>
             <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown
-              </a>
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Dropdown </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#">Action</a></li>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
@@ -63,20 +55,17 @@ Registered to	soldakim -->
               <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
             </li>
           </ul>
-          <form class="d-flex" method="GET"></form>
-          <input
-            id="song-info"
-            class="form-control me-2"
-            type="text"
-            placeholder="Search"
-            autocomplete="off"
-            onkeyup="addMusic()"
-          />
-          <button class="btn btn-outline-dark" onclick="addMusic()">Search</button>
         </div>
       </div>
     </nav>
+    <form class="d-flex" method="GET">form</form>
+    <div style="display: flex; justify-content: center">
+      <input id="song-info" class="form-control me-2" type="text" placeholder="Search" autocomplete="off" onkeyup="addMusic()" style="width: 50%" />
+      <button class="btn btn-outline-dark" onclick="addMusic()">Search</button>
+    </div>
+    <ul class="list-group mt-3"></ul>
 
+<<<<<<< HEAD
     <ul class="list-group"></ul>
 
     <button onclick="addMusic2()">A+</button>
@@ -86,26 +75,59 @@ Registered to	soldakim -->
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
+=======
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+>>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
     <script>
+      // const addMusic = () => {
+      //   $(document).ready($(".list-group").empty());
+      //   const musicKeyWord = $("#song-info").val();
+      //   $.ajax({
+      //     type: "GET",
+      //     url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
+      //     success: res => {
+      //       console.log("연결 성공!");
+
+      //       let musicList = res["results"]["trackmatches"]["track"];
+      //       for (let i = 0; i < musicList.length; ++i) {
+      //         let albumTitle = musicList[i]["name"];
+      //         let albumArtist = musicList[i]["artist"];
+      //         getMusic(albumTitle, albumArtist);
+      //       }
+      //     },
+      //   });
+      // };
+
+      const getMusic = (t, a) => {
+        const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
+        $(".list-group").append(musicHtml);
+      };
+
       const addMusic = () => {
         $(document).ready($(".list-group").empty());
         const musicKeyWord = $("#song-info").val();
 
         $.ajax({
           type: "GET",
+<<<<<<< HEAD
           url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
           done: (res) => {
+=======
+          url: "http://www.maniadb.com/api/search/beatles/?sr=album&display=10&key=example&v=0.5",
+          error: () => {
+            console.log("에러ㅠ3ㅠ");
+          },
+          success: res => {
+>>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
             console.log("연결 성공!");
-
-            let musicList = res["results"]["trackmatches"]["track"];
-            for (let i = 0; i < musicList.length; ++i) {
-              let albumTitle = musicList[i]["name"];
-              let albumArtist = musicList[i]["artist"];
-              getMusic(albumTitle, albumArtist);
-            }
+            console.log(res);
+            const img = $(res).find("image").eq(4).text();
+            const musicHtml = `<li class="list-group-item"><div id="img"><img src="${img}"/></div></li>`;
+            $(".list-group").append(musicHtml);
           },
         });
       };
+<<<<<<< HEAD
 
       const getMusic = (t, a) => {
         const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
@@ -129,6 +151,8 @@ Registered to	soldakim -->
       };
 
       addMusic2();
+=======
+>>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
     </script>
 
     <script
