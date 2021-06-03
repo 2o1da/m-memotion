@@ -65,9 +65,6 @@ Registered to	soldakim -->
     </div>
     <ul class="list-group mt-3"></ul>
 
-<<<<<<< HEAD
-    <ul class="list-group"></ul>
-
     <button onclick="addMusic2()">A+</button>
 
     <script
@@ -109,16 +106,13 @@ Registered to	soldakim -->
 
         $.ajax({
           type: "GET",
-<<<<<<< HEAD
           url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
           done: (res) => {
-=======
           url: "http://www.maniadb.com/api/search/beatles/?sr=album&display=10&key=example&v=0.5",
           error: () => {
             console.log("에러ㅠ3ㅠ");
           },
           success: res => {
->>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
             console.log("연결 성공!");
             console.log(res);
             const img = $(res).find("image").eq(4).text();
@@ -127,7 +121,7 @@ Registered to	soldakim -->
           },
         });
       };
-<<<<<<< HEAD
+
 
       const getMusic = (t, a) => {
         const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
