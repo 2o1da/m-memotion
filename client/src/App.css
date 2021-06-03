@@ -1,6 +1,7 @@
-#bg {
-  background: black;
+html,
+body {
   height: 100%;
+  background: black;
 }
 
 .App {

@@ -43,10 +43,7 @@ function App() {
         Authorization: "Bearer " + token,
       },
     }).then(res => {
-      console.log("addMusic() 성공!");
-
       const item = res.data.tracks.items;
-
       let tempArtist = [...artist];
       let tempTitle = [...title];
       let tempCover = [...cover];
@@ -77,13 +74,14 @@ function App() {
             setInput(e.target.value);
             console.log(e.target.value);
           }}
-          onKeyUp={() => addMusic()}
           onKeyDown={() => {
+            setArtist([]);
             setTitle([]);
             setAlbum([]);
             setCover([]);
             setDate([]);
           }}
+          onKeyUp={() => addMusic()}
           type="text"
           placeholder="Artist, songs, or albums"
         />
@@ -93,7 +91,6 @@ function App() {
           </Button>
         </InputGroup.Append>
       </InputGroup>
-
       <ListGroup id="item-list" style={{ width: "70vw", margin: "auto" }}>
         {title.map((e, i) => {
           {
