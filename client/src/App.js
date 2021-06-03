@@ -14,20 +14,28 @@ function App() {
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    axios("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + new Buffer("7021f5b339514fd6a5b2064441891fea" + ":" + "d0bd3e25e75e4d11bab762115baff179").toString("base64"),
-      },
-      data: "grant_type=client_credentials",
-    }).then(res => {
-      setToken(res.data.access_token);
-    });
+    const fetchToken = async () => {
+      try {
+        const response = await axios("https://accounts.spotify.com/api/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Basic " + new Buffer("7021f5b339514fd6a5b2064441891fea" + ":" + "d0bd3e25e75e4d11bab762115baff179").toString("base64"),
+          },
+          data: "grant_type=client_credentials",
+        });
+
+        setToken(response.data.access_token);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchToken();
   }, []);
 
-  const addMusic = () => {
-    axios("https://api.spotify.com/v1/search?q=the+beatles&type=track&limit=20", {
+  const addMusic = async () => {
+    await axios(`https://api.spotify.com/v1/search?q=${input}&type=track&limit=10`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -35,43 +43,58 @@ function App() {
         Authorization: "Bearer " + token,
       },
     }).then(res => {
+      console.log("addMusic() 성공!");
+
       const item = res.data.tracks.items;
 
-      let temp0 = [...artist];
-      let temp = [...title];
-      let temp2 = [...cover];
-      item.map((e, i) => {
-        temp0.push(e.album.artists[0].name);
-        setArtist(temp0);
+      let tempArtist = [...artist];
+      let tempTitle = [...title];
+      let tempCover = [...cover];
 
-        temp.push(e.name);
-        setTitle(temp);
+      item.map((e, i) => {
+        tempArtist.push(e.album.artists[0].name);
+        setArtist(tempArtist);
+
+        tempTitle.push(e.name);
+        setTitle(tempTitle);
 
         setAlbum(e.album.name);
 
-        temp2.push(e.album.images[1].url);
-        setCover(temp2);
+        tempCover.push(e.album.images[1].url);
+        setCover(tempCover);
 
         setDate(e.album.release_date);
       });
     });
   };
 
-  const inputSong = document.querySelector("#song");
-
   return (
     <div id="bg">
       <h1 style={{ color: "white", padding: "35px", textAlign: "center", fontSize: "50px", fontWeight: "700" }}>M-MEMOTION</h1>
-      <InputGroup className="" style={{ width: "70vw", margin: "auto" }}>
-        <FormControl id="song" type="text" placeholder="Artist, songs, or albums" />
+      <InputGroup style={{ width: "70vw", margin: "auto" }}>
+        <FormControl
+          onChange={e => {
+            setInput(e.target.value);
+            console.log(e.target.value);
+          }}
+          onKeyUp={() => addMusic()}
+          onKeyDown={() => {
+            setTitle([]);
+            setAlbum([]);
+            setCover([]);
+            setDate([]);
+          }}
+          type="text"
+          placeholder="Artist, songs, or albums"
+        />
         <InputGroup.Append>
-          <Button onClick={addMusic()} variant="outline-secondary" style={{ color: "white" }}>
+          <Button onClick={() => addMusic()} variant="outline-secondary" style={{ color: "white" }}>
             Search
           </Button>
         </InputGroup.Append>
       </InputGroup>
 
-      <ListGroup style={{ width: "70vw", margin: "auto" }}>
+      <ListGroup id="item-list" style={{ width: "70vw", margin: "auto" }}>
         {title.map((e, i) => {
           {
             return (
