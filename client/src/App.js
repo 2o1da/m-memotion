@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import axios from "axios";
@@ -13,8 +14,8 @@ function App() {
   const [cover, setCover] = useState([]);
   const [date, setDate] = useState([]);
 
-  useEffect(() => {
-    axios("https://accounts.spotify.com/api/token", {
+  useEffect(async () => {
+    await axios("https://accounts.spotify.com/api/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -25,7 +26,7 @@ function App() {
       setToken(res.data.access_token);
     });
 
-    axios("https://api.spotify.com/v1/search?q=the+beatles&type=track,album,artist", {
+    await axios("https://api.spotify.com/v1/search?q=the+beatles&type=track&limit=20", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -33,32 +34,54 @@ function App() {
         Authorization: "Bearer " + token,
       },
     }).then(res => {
-      setArtist(res.data.tracks.items[0].album.artists[0].name);
-      setTitle(res.data.tracks.items[0].name);
-      setAlbum(res.data.tracks.items[0].album.name);
-      setCover(res.data.tracks.items[0].album.images[1].url);
-      setDate(res.data.tracks.items[0].album.release_date);
+      const item = res.data.tracks.items;
+
+      let temp = [...title];
+      let temp2 = [...cover];
+      item.map((e, i) => {
+        setArtist(...artist, e.album.artists[0].name);
+
+        temp.push(e.name);
+        setTitle(temp);
+
+        setAlbum(e.album.name);
+
+        temp2.push(e.album.images[1].url);
+        setCover(temp2);
+        setDate(e.album.release_date);
+      });
     });
   }, []);
 
   return (
-    <ListGroup>
-      <ListGroup.Item>
-        <img src={cover}></img>
-      </ListGroup.Item>
-      <ListGroup.Item>
-        <h3>{`${artist} - ${title}`}</h3>
-      </ListGroup.Item>
-      <ListGroup.Item>
-        <p>{`Album : ${album}`} </p>
-      </ListGroup.Item>
-      <ListGroup.Item>
-        {" "}
-        <p>{`Release date : ${date}`}</p>
-      </ListGroup.Item>
-      <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
-    </ListGroup>
+    <div id="bg">
+      <h1 style={{ color: "white" }}>M-MEMOTION</h1>
+
+      <ListGroup>
+        {title.map((e, i) => {
+          {
+            return (
+              <ListGroup.Item>
+                <img src={cover[i]} style={{ width: "75px", marginRight: "10px" }}></img>
+                {e}
+              </ListGroup.Item>
+            );
+          }
+        })}
+      </ListGroup>
+    </div>
   );
 }
 
 export default App;
+
+/*
+            <div style={{ display: "flex" }}>
+              <img src={cover} style={{ width: "200px", padding: "10px" }}></img>
+              <div style={{ padding: "10px" }}>
+                <p>{`${artist} - ${title}`}</p>
+                <p>{`Album : ${album}`} </p>
+                <p>{`Release date : ${date}`}</p>
+              </div>
+            </div>
+            */
