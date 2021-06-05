@@ -11,27 +11,56 @@ function App() {
   const [album, setAlbum] = useState([]);
   const [cover, setCover] = useState([]);
   const [date, setDate] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState([]);
+  const [lyrics, setLyrics] = useState("");
+
+  let prev = null;
+  /*
+  function sayHello() {
+    console.log("헬로");
+  }
+  console.log("하이");
+  sayHello();
 
   useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await axios("https://accounts.spotify.com/api/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: "Basic " + new Buffer("7021f5b339514fd6a5b2064441891fea" + ":" + "d0bd3e25e75e4d11bab762115baff179").toString("base64"),
-          },
-          data: "grant_type=client_credentials",
-        });
+    axios
+      .get("http://localhost:3001/token")
+      .then(res => {
+        console.log(res.data);
+        s.setAccessToken(res.data.accessToken);
+        setToken(res.data.accessToken);
+        window.history.pushState({}, null, "/");
+        console.log("토근가져옴");
+      })
+      .catch(() => {
+        window.location = "/";
+      });
+  }, []);
 
-        setToken(response.data.access_token);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchToken();
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/lyrics", {
+        params: {
+          track: "let it be",
+          artist: "beatles",
+        },
+      })
+      .then(res => {
+        setLyrics(res.data.lyrics);
+      });
+  }, []);
+*/
+  useEffect(() => {
+    axios("https://accounts.spotify.com/api/token", {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Basic " + btoa("7021f5b339514fd6a5b2064441891fea" + ":" + "d0bd3e25e75e4d11bab762115baff179"),
+      },
+      data: "grant_type=client_credentials",
+      method: "POST",
+    }).then(res => {
+      console.log("왜안되노");
+    });
   }, []);
 
   const addMusic = async () => {
@@ -43,6 +72,7 @@ function App() {
         Authorization: "Bearer " + token,
       },
     }).then(res => {
+      console.log("addMusic 실행");
       const item = res.data.tracks.items;
       let tempArtist = [...artist];
       let tempTitle = [...title];
@@ -103,19 +133,14 @@ function App() {
           }
         })}
       </ListGroup>
+
+      <Container>
+        <div className="text-center" style={{ whiteSpace: "pre", color: "white", marginTop: "30px" }}>
+          {lyrics}
+        </div>
+      </Container>
     </div>
   );
 }
 
 export default App;
-
-/*
-            <div style={{ display: "flex" }}>
-              <img src={cover} style={{ width: "200px", padding: "10px" }}></img>
-              <div style={{ padding: "10px" }}>
-                <p>{`${artist} - ${title}`}</p>
-                <p>{`Album : ${album}`} </p>
-                <p>{`Release date : ${date}`}</p>
-              </div>
-            </div>
-            */
