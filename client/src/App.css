@@ -4,6 +4,12 @@ body {
   background: black;
 }
 
+footer {
+  padding: 30px;
+  color: gray;
+  text-align: right;
+}
+
 .App {
   text-align: center;
 }

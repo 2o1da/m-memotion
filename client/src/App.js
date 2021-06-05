@@ -1,8 +1,12 @@
+import TypeWriter from "./TypeWriter";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import { clientId, clientSecret, redirectUri } from "./spotify";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Container, ListGroup, InputGroup, FormControl, Button } from "react-bootstrap";
+import { Container, ListGroup, InputGroup, FormControl, Button, CardGroup, Card } from "react-bootstrap";
+import SpotifyWebApi from "spotify-web-api-js";
 
 function App() {
   const [token, setToken] = useState("");
@@ -14,27 +18,62 @@ function App() {
   const [input, setInput] = useState([]);
   const [lyrics, setLyrics] = useState("");
 
-  let prev = null;
-  /*
+  const [newCover, setNewCover] = useState([]);
+  const [newArtist, setNewArtist] = useState([]);
+  const [newAlbum, setNewAlbum] = useState([]);
+  const [newUrl, setNewUrl] = useState([]);
+
+  let spotifyApi = new SpotifyWebApi();
+
   function sayHello() {
     console.log("헬로");
   }
   console.log("하이");
   sayHello();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/token")
+  useEffect(async () => {
+    await axios
+      .post("http://localhost:3001/token")
       .then(res => {
-        console.log(res.data);
-        s.setAccessToken(res.data.accessToken);
-        setToken(res.data.accessToken);
-        window.history.pushState({}, null, "/");
-        console.log("토근가져옴");
+        setToken(res.data.AT);
+        spotifyApi.setAccessToken(res.data.AT);
       })
       .catch(() => {
-        window.location = "/";
+        console.log("토큰 가져오는데 에러");
+        window.location = "http://daum.net";
       });
+
+    // Get New Release
+    spotifyApi.getNewReleases({ limit: 3, offset: 0, country: "KR" }).then(
+      function (data) {
+        const items = data.albums.items;
+
+        let tempCover = [...newCover];
+        let tempArtist = [...newArtist];
+        let tempAlbum = [...newAlbum];
+        let tempUrl = [...newUrl];
+
+        items.map((e, i) => {
+          tempCover.push(e.images[1].url);
+          setNewCover(tempCover);
+
+          tempArtist.push(e.artists[0].name);
+          setNewArtist(tempArtist);
+
+          tempAlbum.push(e.name);
+          setNewAlbum(tempAlbum);
+
+          tempUrl.push(e.external_urls.spotify);
+          setNewUrl(tempUrl);
+        });
+
+        return;
+      },
+      function (err) {
+        console.error(err);
+        return;
+      }
+    );
   }, []);
 
   useEffect(() => {
@@ -49,22 +88,23 @@ function App() {
         setLyrics(res.data.lyrics);
       });
   }, []);
-*/
+
+  /*
   useEffect(() => {
     axios("https://accounts.spotify.com/api/token", {
       headers: {
+        method: "POST",
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + btoa("7021f5b339514fd6a5b2064441891fea" + ":" + "d0bd3e25e75e4d11bab762115baff179"),
+        Authorization: "Basic " + btoa(clientId + ":" + clientSecret),
       },
       data: "grant_type=client_credentials",
-      method: "POST",
     }).then(res => {
-      console.log("왜안되노");
+      console.log("왜 못가져오노");
     });
   }, []);
-
-  const addMusic = async () => {
-    await axios(`https://api.spotify.com/v1/search?q=${input}&type=track&limit=10`, {
+*/
+  async function addMusic() {
+    await axios(`https://api.spotify.com/v1/search?q=${input}&type=track&limit=20`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -93,11 +133,14 @@ function App() {
         setDate(e.album.release_date);
       });
     });
-  };
+  }
 
   return (
-    <div id="bg">
-      <h1 style={{ color: "white", padding: "35px", textAlign: "center", fontSize: "50px", fontWeight: "700" }}>M-MEMOTION</h1>
+    <div id="bg" stlye={{ position: "relative" }}>
+      <h2 id="title" style={{ color: "white", padding: "35px", textAlign: "center", fontSize: "50px", fontWeight: "700" }}>
+        M-MEMOTION
+      </h2>
+      <TypeWriter text={"M-MEMOTION"} />
       <InputGroup style={{ width: "70vw", margin: "auto" }}>
         <FormControl
           onChange={e => {
@@ -121,7 +164,8 @@ function App() {
           </Button>
         </InputGroup.Append>
       </InputGroup>
-      <ListGroup id="item-list" style={{ width: "70vw", margin: "auto" }}>
+
+      <ListGroup id="item-list" style={{ width: "70vw", margin: "auto", position: "absoulte", zIndex: "-1" }}>
         {title.map((e, i) => {
           {
             return (
@@ -134,13 +178,44 @@ function App() {
         })}
       </ListGroup>
 
+      <Container style={{ display: "flex", justifyContent: "center" }}>
+        {newCover.map((e, i) => {
+          {
+            return (
+              <Card style={{ width: "18rem", margin: "20px" }}>
+                <Card.Img variant="top" src={newCover[i]} style={{ padding: "10px" }} />
+                <Card.Body style={{ position: "relative" }}>
+                  <Button variant="secondary" style={{ position: "absolute", right: "0", bottom: "0", margin: "10px" }} href={newUrl[i]} target={"_blank"}>
+                    Detail
+                  </Button>
+                  <Card.Title>{newAlbum[i]}</Card.Title>
+                  <Card.Text style={{ margin: "0" }}>{newArtist[i]}</Card.Text>
+                </Card.Body>
+              </Card>
+            );
+          }
+        })}
+      </Container>
+
       <Container>
         <div className="text-center" style={{ whiteSpace: "pre", color: "white", marginTop: "30px" }}>
           {lyrics}
         </div>
       </Container>
+      <footer>Copyright © 2021 김다솔 All rights reserved</footer>
     </div>
   );
 }
 
 export default App;
+
+/*
+            <div style={{ display: "flex" }}>
+              <img src={cover} style={{ width: "200px", padding: "10px" }}></img>
+              <div style={{ padding: "10px" }}>
+                <p>{`${artist} - ${title}`}</p>
+                <p>{`Album : ${album}`} </p>
+                <p>{`Release date : ${date}`}</p>
+              </div>
+            </div>
+            */

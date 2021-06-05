@@ -1,0 +1,56 @@
+h1 {
+  font-family: "Source Code Pro", monospace;
+  color: white;
+  text-align: center;
+  padding: 30px;
+}
+
+h3 {
+  /* font-family: "Source Code Pro", monospace; */
+  padding: 10px;
+  color: darkgray;
+  margin: auto;
+
+  width: max-content;
+  position: relative;
+}
+
+h3::before,
+h3::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+h3::before {
+  background: black;
+  animation: typewriter 3s steps(41) forwards;
+}
+
+h3::after {
+  width: 0.125em;
+  background: lightgray;
+  animation: typewriter 3s steps(41) forwards, blink 700ms steps(24) infinite;
+}
+
+@keyframes typewriter {
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes blink {
+  to {
+    background: transparent;
+  }
+}
+
+@keyframes fadeInUP {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
