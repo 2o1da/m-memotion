@@ -30,6 +30,7 @@ app.post("/token", (req, res) => {
 
 app.get("/lyrics", async (req, res) => {
   const lyrics = (await lyricsFinder(req.query.artist, req.query.track)) || "가사 읎다";
+
   res.json({ lyrics });
 });
 

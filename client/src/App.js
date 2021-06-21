@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import TypeWriter from "./TypeWriter";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -7,6 +8,11 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, ListGroup, InputGroup, FormControl, Button, CardGroup, Card } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-js";
+
+import Post from "./Post";
+
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 function App() {
   const [token, setToken] = useState("");
@@ -24,17 +30,29 @@ function App() {
   const [newUrl, setNewUrl] = useState([]);
 
   let spotifyApi = new SpotifyWebApi();
-
-  function sayHello() {
-    console.log("헬로");
-  }
-  console.log("하이");
-  sayHello();
-
+  /*
+  useEffect(() => {
+    axios("https://accounts.spotify.com/api/token", {
+      headers: {
+        method: "POST",
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Basic " + btoa(clientId + ":" + clientSecret),
+      },
+      data: "grant_type=client_credentials",
+    })
+      .then(res => {
+        console.log("왜 못가져오니");
+      })
+      .catch(err => {
+        console.log("에러:", err);
+      });
+  }, []);
+*/
   useEffect(async () => {
     await axios
       .post("http://localhost:3001/token")
       .then(res => {
+        console.log("http://localhost:3001/token POST요청 성공");
         setToken(res.data.AT);
         spotifyApi.setAccessToken(res.data.AT);
       })
@@ -44,7 +62,7 @@ function App() {
       });
 
     // Get New Release
-    spotifyApi.getNewReleases({ limit: 3, offset: 0, country: "KR" }).then(
+    spotifyApi.getNewReleases({ limit: 5, offset: 0, country: "US" }).then(
       function (data) {
         const items = data.albums.items;
 
@@ -84,27 +102,14 @@ function App() {
           artist: "beatles",
         },
       })
-      .then(res => {
-        setLyrics(res.data.lyrics);
+      .then(response => {
+        console.log("http://localhost:3001/lyrics GET요청 성공");
+        setLyrics(response.data.lyrics);
       });
   }, []);
 
-  /*
-  useEffect(() => {
-    axios("https://accounts.spotify.com/api/token", {
-      headers: {
-        method: "POST",
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + btoa(clientId + ":" + clientSecret),
-      },
-      data: "grant_type=client_credentials",
-    }).then(res => {
-      console.log("왜 못가져오노");
-    });
-  }, []);
-*/
-  async function addMusic() {
-    await axios(`https://api.spotify.com/v1/search?q=${input}&type=track&limit=20`, {
+  function searchMusic(e) {
+    axios(`https://api.spotify.com/v1/search?q=${input}&type=track&limit=20`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -113,6 +118,7 @@ function App() {
       },
     }).then(res => {
       console.log("addMusic 실행");
+
       const item = res.data.tracks.items;
       let tempArtist = [...artist];
       let tempTitle = [...title];
@@ -135,17 +141,40 @@ function App() {
     });
   }
 
+  const responsive = {
+    superLargeDesktop: {
+      // the naming can be any, depends on you.
+      breakpoint: { max: 4000, min: 3000 },
+      items: 3,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 3,
+      slidesToSlide: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      slidesToSlide: 3,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+
   return (
-    <div id="bg" stlye={{ position: "relative" }}>
+    <div stlye={{ position: "relative", float: "left" }}>
+      <img id="bg" src={"./bg.png"}></img>
       <h2 id="title" style={{ color: "white", padding: "35px", textAlign: "center", fontSize: "50px", fontWeight: "700" }}>
         M-MEMOTION
       </h2>
       <TypeWriter text={"M-MEMOTION"} />
-      <InputGroup style={{ width: "70vw", margin: "auto" }}>
+
+      <InputGroup style={{ width: "50vw", margin: "auto", marginTop: "30px" }}>
         <FormControl
           onChange={e => {
             setInput(e.target.value);
-            console.log(e.target.value);
           }}
           onKeyDown={() => {
             setArtist([]);
@@ -154,18 +183,18 @@ function App() {
             setCover([]);
             setDate([]);
           }}
-          onKeyUp={() => addMusic()}
+          onKeyUp={() => searchMusic()}
           type="text"
           placeholder="Artist, songs, or albums"
         />
         <InputGroup.Append>
-          <Button onClick={() => addMusic()} variant="outline-secondary" style={{ color: "white" }}>
+          <Button onClick={() => searchMusic()} variant="outline-secondary" style={{ color: "white" }}>
             Search
           </Button>
         </InputGroup.Append>
       </InputGroup>
 
-      <ListGroup id="item-list" style={{ width: "70vw", margin: "auto", position: "absoulte", zIndex: "-1" }}>
+      <Carousel responsive={responsive} id="item-list" style={{ width: "50vw", margin: "auto", position: "absoulte", zIndex: "-1" }}>
         {title.map((e, i) => {
           {
             return (
@@ -176,13 +205,13 @@ function App() {
             );
           }
         })}
-      </ListGroup>
+      </Carousel>
 
-      <Container style={{ display: "flex", justifyContent: "center" }}>
+      <Container style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
         {newCover.map((e, i) => {
           {
             return (
-              <Card style={{ width: "18rem", margin: "20px" }}>
+              <Card style={{ width: "18rem", margin: "20px", boxShadow: "3px 3px 10px white" }}>
                 <Card.Img variant="top" src={newCover[i]} style={{ padding: "10px" }} />
                 <Card.Body style={{ position: "relative" }}>
                   <Button variant="secondary" style={{ position: "absolute", right: "0", bottom: "0", margin: "10px" }} href={newUrl[i]} target={"_blank"}>

@@ -7,12 +7,14 @@ h1 {
 
 h3 {
   /* font-family: "Source Code Pro", monospace; */
-  padding: 10px;
+
   color: darkgray;
   margin: auto;
+  padding-bottom: 1px;
 
   width: max-content;
   position: relative;
+  opacity: 0.7;
 }
 
 h3::before,
