@@ -1,12 +1,7 @@
-// Client ID 7021f5b339514fd6a5b2064441891fea
-// Client Secret d0bd3e25e75e4d11bab762115baff179
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const clientId = "7021f5b339514fd6a5b2064441891fea";
-const clientSecret = "d0bd3e25e75e4d11bab762115baff179";
-const redirectUri = "http://localhost:3000/";
+import { clientId, clientSecret } from "./spotify";
 
 function Login(props) {
   const [token, setToken] = useState("");

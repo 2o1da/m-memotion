@@ -9,10 +9,6 @@ import React, { useState, useEffect } from "react";
 import { Container, ListGroup, InputGroup, FormControl, Button, CardGroup, Card } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-js";
 
-import Post from "./Post";
-
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 
 function App() {
   const [token, setToken] = useState("");
@@ -237,14 +233,3 @@ function App() {
 }
 
 export default App;
-
-/*
-            <div style={{ display: "flex" }}>
-              <img src={cover} style={{ width: "200px", padding: "10px" }}></img>
-              <div style={{ padding: "10px" }}>
-                <p>{`${artist} - ${title}`}</p>
-                <p>{`Album : ${album}`} </p>
-                <p>{`Release date : ${date}`}</p>
-              </div>
-            </div>
-            */
