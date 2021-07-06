@@ -3,12 +3,11 @@ import TypeWriter from "./TypeWriter";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { clientId, clientSecret, redirectUri } from "./spotify";
+import { clientId, clientSecret } from "./spotify";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, ListGroup, InputGroup, FormControl, Button, CardGroup, Card } from "react-bootstrap";
 import SpotifyWebApi from "spotify-web-api-js";
-
 
 function App() {
   const [token, setToken] = useState("");
@@ -26,6 +25,7 @@ function App() {
   const [newUrl, setNewUrl] = useState([]);
 
   let spotifyApi = new SpotifyWebApi();
+
   /*
   useEffect(() => {
     axios("https://accounts.spotify.com/api/token", {

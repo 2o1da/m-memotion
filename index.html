@@ -2,7 +2,6 @@
 API key	9df4bcb929d956ddc3bd99f4c141956f
 Shared secret	63a89791eec90aa6cdb3bc3aa40ff6fc
 Registered to	soldakim -->
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -73,77 +72,75 @@ Registered to	soldakim -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     >>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
     <script>
-            // const addMusic = () => {
-            //   $(document).ready($(".list-group").empty());
-            //   const musicKeyWord = $("#song-info").val();
-            //   $.ajax({
-            //     type: "GET",
-            //     url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
-            //     success: res => {
-            //       console.log("연결 성공!");
+      // const addMusic = () => {
+      //   $(document).ready($(".list-group").empty());
+      //   const musicKeyWord = $("#song-info").val();
+      //   $.ajax({
+      //     type: "GET",
+      //     url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
+      //     success: res => {
+      //       console.log("연결 성공!");
 
-            //       let musicList = res["results"]["trackmatches"]["track"];
-            //       for (let i = 0; i < musicList.length; ++i) {
-            //         let albumTitle = musicList[i]["name"];
-            //         let albumArtist = musicList[i]["artist"];
-            //         getMusic(albumTitle, albumArtist);
-            //       }
-            //     },
-            //   });
-            // };
+      //       let musicList = res["results"]["trackmatches"]["track"];
+      //       for (let i = 0; i < musicList.length; ++i) {
+      //         let albumTitle = musicList[i]["name"];
+      //         let albumArtist = musicList[i]["artist"];
+      //         getMusic(albumTitle, albumArtist);
+      //       }
+      //     },
+      //   });
+      // };
 
-            const getMusic = (t, a) => {
-              const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
-              $(".list-group").append(musicHtml);
-            };
+      const getMusic = (t, a) => {
+        const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
+        $(".list-group").append(musicHtml);
+      };
 
-            const addMusic = () => {
-              $(document).ready($(".list-group").empty());
-              const musicKeyWord = $("#song-info").val();
+      const addMusic = () => {
+        $(document).ready($(".list-group").empty());
+        const musicKeyWord = $("#song-info").val();
 
-              $.ajax({
-                type: "GET",
-                url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
-                done: (res) => {
-                url: "http://www.maniadb.com/api/search/beatles/?sr=album&display=10&key=example&v=0.5",
-                error: () => {
-                  console.log("에러ㅠ3ㅠ");
-                },
-                success: res => {
-                  console.log("연결 성공!");
-                  console.log(res);
-                  const img = $(res).find("image").eq(4).text();
-                  const musicHtml = `<li class="list-group-item"><div id="img"><img src="${img}"/></div></li>`;
-                  $(".list-group").append(musicHtml);
-                },
-              });
-            };
+        $.ajax({
+          type: "GET",
+          url: `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${musicKeyWord}&api_key=9df4bcb929d956ddc3bd99f4c141956f&format=json`,
+          done: (res) => {
+          url: "http://www.maniadb.com/api/search/beatles/?sr=album&display=10&key=example&v=0.5",
+          error: () => {
+            console.log("에러ㅠ3ㅠ");
+          },
+          success: res => {
+            console.log("연결 성공!");
+            console.log(res);
+            const img = $(res).find("image").eq(4).text();
+            const musicHtml = `<li class="list-group-item"><div id="img"><img src="${img}"/></div></li>`;
+            $(".list-group").append(musicHtml);
+          },
+        });
+      };
 
 
-            const getMusic = (t, a) => {
-              const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
-              $(".list-group").append(musicHtml);
-            };
+      const getMusic = (t, a) => {
+        const musicHtml = `<li class="list-group-item">${t} - ${a}</li>`;
+        $(".list-group").append(musicHtml);
+      };
 
-            $(document).ready($(".list-group").empty());
+      $(document).ready($(".list-group").empty());
 
-            const addMusic2 = () => {
-              $.ajax({
-                url: "http://www.maniadb.com/api/search/metallica/?sr=artist&display=10&key=example&v=0.5",
-                dataType: "xml",
-                success: function (data) {
-                  console.log(data);
-                },
-                error: (err) => {
-                  console.log("FUCK");
-                  console.log(err);
-                },
-              });
-            };
+      const addMusic2 = () => {
+        $.ajax({
+          url: "http://www.maniadb.com/api/search/metallica/?sr=artist&display=10&key=example&v=0.5",
+          dataType: "xml",
+          success: function (data) {
+            console.log(data);
+          },
+          error: (err) => {
+            console.log("FUCK");
+            console.log(err);
+          },
+        });
+      };
 
-            addMusic2();
-      =======
-      >>>>>>> 97c264a3c9e61c3de1e06a0981997ef38ff024c7
+      addMusic2();
     </script>
 
     <script
